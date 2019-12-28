@@ -11,7 +11,6 @@ import random
 import torch
 from torch.optim import Adam
 from torch.autograd import Variable
-import pytorch_ssim
 import utils
 from net import DenseFuse_net
 from args_fusion import args
