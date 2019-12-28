@@ -89,7 +89,7 @@ def vision_features(feature_maps, img_type):
 
 def main():
 	# run demo
-	test_path = "images/test/"
+	test_path = "images/test-RGB/"
 	# test_path = "images/IV_images/"
 	network_type = 'densefuse'
 	fusion_type = 'auto'  # auto, fusion_layer, fusion_all
@@ -98,7 +98,8 @@ def main():
 	output_path = './outputs/'
 	strategy_type = strategy_type_list[0]
 
-	in_c = 1
+	# in_c = 3 for RGB images; in_c = 1 for gray images
+	in_c = 3
 	if in_c == 1:
 		out_c = in_c
 		mode = 'L'
