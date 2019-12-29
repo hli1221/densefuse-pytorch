@@ -40,18 +40,18 @@ def train(i, original_imgs_path):
 		img_model = 'RGB'
 	input_nc = in_c
 	output_nc = in_c
-	nest_model = DenseFuse_net(input_nc, output_nc)
+	densefuse_model = DenseFuse_net(input_nc, output_nc)
 
 	if args.resume is not None:
 		print('Resuming, initializing using weight from {}.'.format(args.resume))
-		nest_model.load_state_dict(torch.load(args.resume))
-	print(nest_model)
-	optimizer = Adam(nest_model.parameters(), args.lr)
+		densefuse_model.load_state_dict(torch.load(args.resume))
+	print(densefuse_model)
+	optimizer = Adam(densefuse_model.parameters(), args.lr)
 	mse_loss = torch.nn.MSELoss()
 	ssim_loss = pytorch_msssim.msssim
 
 	if args.cuda:
-		nest_model.cuda()
+		densefuse_model.cuda()
 
 	tbar = trange(args.epochs)
 	print('Start training.....')
@@ -65,7 +65,7 @@ def train(i, original_imgs_path):
 		print('Epoch %d.....' % e)
 		# load training database
 		image_set_ir, batches = utils.load_dataset(original_imgs_path, batch_size)
-		nest_model.train()
+		densefuse_model.train()
 		count = 0
 		for batch in range(batches):
 			image_paths = image_set_ir[batch * batch_size:(batch * batch_size + batch_size)]
@@ -79,10 +79,10 @@ def train(i, original_imgs_path):
 				img = img.cuda()
 			# get fusion image
 			# encoder
-			en = nest_model.encoder(img)
+			en = densefuse_model.encoder(img)
 			# decoder
-			outputs = nest_model.decoder(en)
-			# resolution loss: between fusion image and visible image
+			outputs = densefuse_model.decoder(en)
+			# resolution loss
 			x = Variable(img.data.clone(), requires_grad=False)
 
 			ssim_loss_value = 0.
@@ -119,13 +119,13 @@ def train(i, original_imgs_path):
 
 			if (batch + 1) % (200 * args.log_interval) == 0:
 				# save model
-				nest_model.eval()
-				nest_model.cpu()
+				densefuse_model.eval()
+				densefuse_model.cpu()
 				save_model_filename = args.ssim_path[i] + '/' + "Epoch_" + str(e) + "_iters_" + str(count) + "_" + \
 									  str(time.ctime()).replace(' ', '_').replace(':', '_') + "_" + args.ssim_path[
 										  i] + ".model"
 				save_model_path = os.path.join(args.save_model_dir, save_model_filename)
-				torch.save(nest_model.state_dict(), save_model_path)
+				torch.save(densefuse_model.state_dict(), save_model_path)
 				# save loss data
 				# pixel loss
 				loss_data_pixel = np.array(Loss_pixel)
@@ -149,8 +149,8 @@ def train(i, original_imgs_path):
 				save_loss_path = os.path.join(args.save_loss_dir, loss_filename_path)
 				scio.savemat(save_loss_path, {'loss_total': loss_data_total})
 
-				nest_model.train()
-				nest_model.cuda()
+				densefuse_model.train()
+				densefuse_model.cuda()
 				tbar.set_description("\nCheckpoint, trained model saved at", save_model_path)
 
 	# pixel loss
@@ -175,12 +175,12 @@ def train(i, original_imgs_path):
 	save_loss_path = os.path.join(args.save_loss_dir, loss_filename_path)
 	scio.savemat(save_loss_path, {'loss_total': loss_data_total})
 	# save model
-	nest_model.eval()
-	nest_model.cpu()
+	densefuse_model.eval()
+	densefuse_model.cpu()
 	save_model_filename = args.ssim_path[i] + '/' "Final_epoch_" + str(args.epochs) + "_" + \
 						  str(time.ctime()).replace(' ', '_').replace(':', '_') + "_" + args.ssim_path[i] + ".model"
 	save_model_path = os.path.join(args.save_model_dir, save_model_filename)
-	torch.save(nest_model.state_dict(), save_model_path)
+	torch.save(densefuse_model.state_dict(), save_model_path)
 
 	print("\nDone, trained model saved at", save_model_path)
 
