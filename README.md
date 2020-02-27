@@ -7,9 +7,8 @@ Published in: IEEE Transactions on Image Processing
 - [IEEEXplore](https://ieeexplore.ieee.org/document/8580578)
 - [arXiv](https://arxiv.org/abs/1804.08361)
 
-## Original version(TensorFlow) is available at [here](https://github.com/hli1221/imagefusion_densefuse)
+# Original version(TensorFlow) is available at [here](https://github.com/hli1221/imagefusion_densefuse)
 
 
-pytorch version 0.4.1
 
 
