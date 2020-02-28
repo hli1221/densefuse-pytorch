@@ -99,4 +99,4 @@ class DenseFuse_net(nn.Module):
         x4 = self.conv4(x3)
         output = self.conv5(x4)
 
-        return output
+        return [output]
