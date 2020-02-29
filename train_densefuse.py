@@ -56,6 +56,15 @@ def train(i, original_imgs_path):
 	tbar = trange(args.epochs)
 	print('Start training.....')
 
+	# creating save path
+	temp_path_model = os.path.join(args.save_model_dir, args.ssim_path[i])
+	if os.path.exists(temp_path_model) is False:
+		os.mkdir(temp_path_model)
+
+	temp_path_loss = os.path.join(args.save_loss_dir, args.ssim_path[i])
+	if os.path.exists(temp_path_loss) is False:
+		os.mkdir(temp_path_loss)
+
 	Loss_pixel = []
 	Loss_ssim = []
 	Loss_all = []
