@@ -98,6 +98,9 @@ def main():
 	output_path = './outputs/'
 	strategy_type = strategy_type_list[0]
 
+	if os.path.exists(output_path) is False:
+		os.mkdir(output_path)
+
 	# in_c = 3 for RGB images; in_c = 1 for gray images
 	in_c = 1
 	if in_c == 1:
