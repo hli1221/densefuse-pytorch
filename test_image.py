@@ -36,7 +36,7 @@ def _generate_fusion_image(model, strategy_type, img1, img2):
 	# f = en_v
 	# decoder
 	img_fusion = model.decoder(f)
-	return img_fusion
+	return img_fusion[0]
 
 
 def run_demo(model, infrared_path, visible_path, output_path_root, index, fusion_type, network_type, strategy_type, ssim_weight_str, mode):
